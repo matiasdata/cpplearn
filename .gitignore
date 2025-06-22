@@ -1,0 +1,24 @@
+# Object files
+*.o
+
+# Compiled binary executables (macOS/Linux — no extension)
+main
+app
+a.out
+*.out
+
+# macOS system files
+.DS_Store
+
+# Editor-specific files
+.vscode/
+*.code-workspace
+
+# Xcode (if ever used)
+*.xcworkspace
+*.xcodeproj
+build/
+
+# Backup/temporary files
+*~
+*.swp
