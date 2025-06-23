@@ -84,15 +84,15 @@ private:
 class EntityPtr
 {
 public:
-    EntityPtr(String* name) : m_Name(name) {}
+    EntityPtr(const String* name) : m_Name(name) {}
 
-    void PrintName()
+    void PrintName() const
     {
         m_Name->Print();
     }
 
 private:
-    String* m_Name;
+    const String* m_Name;
 };
 
 class EntityMov
