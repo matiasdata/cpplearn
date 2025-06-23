@@ -215,6 +215,7 @@ int main()
     Move semantics avoid unnecessary copying of expensive resources 
     like heap memory. They are ideal for working with temporaries 
     or when transferring ownership from one object to another.
+    No need of references/pointers which make the code error prone, and no need for copying.
 
     Summary:
     - Use `EntityCopy` for value ownership.
