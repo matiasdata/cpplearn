@@ -39,6 +39,7 @@ public:
         m_Data = other.m_Data;
         other.m_Size = 0;
         other.m_Data = nullptr;
+        return *this;
     }
 
     ~String()
