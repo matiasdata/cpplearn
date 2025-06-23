@@ -35,6 +35,8 @@ public:
     {
         std::cout << "Destroyed!\n";
         delete[] m_Data;
+        m_Data = nullptr;
+        m_Size = 0;
     }
 
     void Print()
@@ -51,11 +53,29 @@ private:
     uint32_t m_Size;
 };
 
-class Entity
+
+
+
+class EntityRef
 {
 public:
-    Entity(const String& name) : m_Name(name) {}
-    Entity(String&& name) : m_Name((String&&) name) {}
+    EntityRef(String& name) : m_Name(name) {}
+    //Entity(String&& name) : m_Name((String&&) name) {}
+
+    void PrintName()
+    {
+        m_Name.Print();
+    }
+
+private:
+    String& m_Name;
+};
+
+class EntityMov
+{
+public:
+    EntityMov(const String& name) : m_Name(name) {}
+    EntityMov(String&& name) : m_Name((String&&) name) {}
 
     void PrintName()
     {
@@ -67,9 +87,20 @@ private:
 };
 
 int main()
-{  
-    Entity entity("Matias");
-    entity.PrintName();
+{   
+    {
+        String myName("Matias");
+        EntityRef myEntityRef(myName);
+        myEntityRef.PrintName();
+        
+    }
+    std::cout << "Out of first scope\n";
+    {
+        EntityMov myEntityMov("Matias");
+        myEntityMov.PrintName();
+
+    }
+    std::cout << "Out of second scope\n";
     std::cin.get();
 }
 
