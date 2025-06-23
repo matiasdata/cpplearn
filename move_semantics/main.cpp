@@ -209,6 +209,13 @@ int main()
     - Ownership of dynamically allocated memory is transferred.
     - The original object is left in a valid but empty state.
 
+    Notes:
+    T&& doesn’t mean “reference to reference”—it means "rvalue reference", i.e., reference to a temporary that can be moved from.
+    The string "Matias" in the code:
+    EntityMov myEntityMov("Matias");
+    is a temporary const char* literal that is converted into a temporary String. 
+    That temporary String can be moved into myEntityMov. For that we need the move constructor. 
+
     ------------------------
     Why Use Move Semantics?
     ------------------------
