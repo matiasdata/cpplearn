@@ -161,8 +161,6 @@ int main()
     }
     std::cout << "Out of fourth scope\n";
 
-    
-
     String string = "Hello";
     String dest = "Matias";
     std::cout << "string: ";
