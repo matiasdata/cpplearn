@@ -33,12 +33,15 @@ public:
 
     String& operator=(String&& other)
     {
-        std::cout << "Moved!\n";
-        delete[] m_Data;
-        m_Size = other.m_Size;
-        m_Data = other.m_Data;
-        other.m_Size = 0;
-        other.m_Data = nullptr;
+        if(this != &other)
+        {
+            std::cout << "Moved!\n";
+            delete[] m_Data;
+            m_Size = other.m_Size;
+            m_Data = other.m_Data;
+            other.m_Size = 0;
+            other.m_Data = nullptr;
+        }
         return *this;
     }
 
@@ -157,12 +160,19 @@ int main()
         myEntityMov.PrintName();
     }
     std::cout << "Out of fourth scope\n";
+
+    
+
     String string = "Hello";
-    String dest = std::move(string); 
-    /* move string into dest, without copying (using move constructor, not assignment).
-     equivalent to:
-     String dest(std::move(string));
-    */
+    String dest = "Matias";
+    std::cout << "string: ";
+    string.Print();
+    std::cout << "dest: ";
+    dest.Print();
+    dest = std::move(string);
+    std::cout << "string: ";
+    string.Print();
+    std::cout << "dest: ";
     dest.Print();
     std::cin.get();
 }
