@@ -97,7 +97,7 @@ int main() {
     byValue(rx);  // T=int, param=int
 
     std::cout << "\n--- Case 4: Arrays ---\n";
-    const char name[] = "J. P. Briggs";
+    const char name[] = "Matias Data";
     arrayDecay(name); // T=const char*, param=const char*
     arrayRef(name);   // T=const char[13], param=const char (&)[13]
 
