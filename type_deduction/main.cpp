@@ -58,18 +58,6 @@ void arrayRef(T& param) {
 // 5. Function pointer deduction
 void someFunc(int, double) {}
 
-template<typename T>
-void funcDecay(T param) {
-    std::cout << "funcDecay - T: " << type_name<T>() << "\n";
-    std::cout << "funcDecay - param: " << type_name<decltype(param)>() << "\n";
-}
-
-template<typename T>
-void funcRef(T& param) {
-    std::cout << "funcRef - T: " << type_name<T>() << "\n";
-    std::cout << "funcRef - param: " << type_name<decltype(param)>() << "\n";
-}
-
 int main() {
     std::cout << "--- Case 1: ParamType is a Reference or Pointer, but not a Universal Reference ---\n";
     int x = 10;
@@ -96,14 +84,14 @@ int main() {
     byValue(cx);  // T=int, param=int (const discarded)
     byValue(rx);  // T=int, param=int
 
-    std::cout << "\n--- Case 4: Arrays ---\n";
+    std::cout << "\n--- Special case: Arrays ---\n";
     const char name[] = "Matias Data";
-    arrayDecay(name); // T=const char*, param=const char*
-    arrayRef(name);   // T=const char[13], param=const char (&)[13]
+    byValue(name); // T=const char*, param=const char*
+    byRef(name);   // T=const char[13], param=const char (&)[13]
 
-    std::cout << "\n--- Case 5: Function Pointers ---\n";
-    funcDecay(someFunc); // T=void (*)(int, double), param=void (*)(int, double)
-    funcRef(someFunc);   // T=void (int, double), param=void (&)(int, double)
+    std::cout << "\n--- Special case: Function Pointers ---\n";
+    byValue(someFunc); // T=void (*)(int, double), param=void (*)(int, double)
+    byRef(someFunc);   // T=void (int, double), param=void (&)(int, double)
 
     return 0;
 }
