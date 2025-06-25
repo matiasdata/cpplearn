@@ -12,10 +12,21 @@ std::string type_name() {
 // 1. Pass-by-reference (non-universal)
 template<typename T>
 void byRef(T& param) {
-    std::cout << "T: " << type_name<T>() << "\n";
-    std::cout << "param: " << type_name<decltype(param)>() << "\n";
+    std::cout << "byRef - T: " << type_name<T>() << "\n";
+    std::cout << "byRef - param: " << type_name<decltype(param)>() << "\n";
 }
 
+template<typename T>
+void byConstRef(const T& param) {
+    std::cout << "byConstRef - T: " << type_name<T>() << "\n";
+    std::cout << "byConstRef - param: " << type_name<decltype(param)>() << "\n";
+}
+
+template<typename T>
+void byPtr(T* param) {
+    std::cout << "byPtr - T: " << type_name<T>() << "\n";
+    std::cout << "byPtr - param: " << type_name<decltype(param)>() << "\n";
+}
 
 // 2. Universal Reference
 template<typename T>
@@ -60,13 +71,19 @@ void funcRef(T& param) {
 }
 
 int main() {
-    std::cout << "--- Case 1: Pass-by-reference ---\n";
+    std::cout << "--- Case 1: ParamType is a Reference or Pointer, but not a Universal Reference ---\n";
     int x = 10;
     const int cx = x;
     const int& rx = cx;
-    byRef(x);   // T=int, param=int&
-    byRef(cx);  // T=const int, param=const int&
-    byRef(rx);  // T=const int, param=const int&
+    byRef(x);   // T=int, param=const int&
+    byRef(cx);  // T=int, param=const int&
+    byRef(rx);  // T=int, param=const int&
+    byConstRef(x);   // T=int, param=int&
+    byConstRef(cx);  // T=const int, param=const int&
+    byConstRef(rx);  // T=const int, param=const int&
+    const int *px = &x;
+    byPtr(&x); // T is int, param's type is int*
+    byPtr(px); // T is const int, param's type is const int*
 
     std::cout << "\n--- Case 2: Universal Reference ---\n";
     universalRef(x);   // T=int&, param=int&
