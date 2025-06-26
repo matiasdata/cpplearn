@@ -53,13 +53,13 @@ int main() {
     const int& rx = cx;
     const int *px = &x;
 
-    byRef(x);   // T=int, param= int&
-    byRef(cx);  // T=int, param=const int&
-    byRef(rx);  // T=int, param=const int&
+    byRef(x);   // T=int, param=int&
+    byRef(cx);  // T=const int, param=const int&
+    byRef(rx);  // T=const int, param=const int&
 
-    byConstRef(x);   // T=int, param=int&
-    byConstRef(cx);  // T=const int, param=const int&
-    byConstRef(rx);  // T=const int, param=const int&
+    byConstRef(x);   // T=int, param=const int&
+    byConstRef(cx);  // T=int, param=const int&
+    byConstRef(rx);  // T=int, param=const int&
    
     byPtr(&x); // T is int, param's type is int*
     byPtr(px); // T is const int, param's type is const int*
