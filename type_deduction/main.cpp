@@ -5,8 +5,10 @@ template <typename T>
 std::string type_name() {
     std::string name = __PRETTY_FUNCTION__;
     auto start = name.find("T = ") + 4;
-    auto end = name.find(']', start);
-    return name.substr(start, (end - start));
+    auto end = name.find('\0', start);
+    auto myFunType = name.substr(start, (end - start));
+    myFunType.pop_back();
+    return myFunType;
 }
 
 // 1. Pass-by-reference (non-universal)
