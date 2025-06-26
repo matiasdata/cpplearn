@@ -65,13 +65,16 @@ int main() {
     int x = 10;
     const int cx = x;
     const int& rx = cx;
+    const int *px = &x;
+
     byRef(x);   // T=int, param=const int&
     byRef(cx);  // T=int, param=const int&
     byRef(rx);  // T=int, param=const int&
+    
     byConstRef(x);   // T=int, param=int&
     byConstRef(cx);  // T=const int, param=const int&
     byConstRef(rx);  // T=const int, param=const int&
-    const int *px = &x;
+   
     byPtr(&x); // T is int, param's type is int*
     byPtr(px); // T is const int, param's type is const int*
 
