@@ -51,7 +51,8 @@ int main() {
     int x = 10;
     const int cx = x;
     const int& rx = cx;
-    const int *px = &x;
+    const int *px = &x; // px is a pointer to x as a const int
+    const int* const cpx = &x; 
 
     byRef(x);   // T=int, param=int&
     byRef(cx);  // T=const int, param=const int&
@@ -72,8 +73,10 @@ int main() {
 
     std::cout << "\n--- Case 3: Pass-by-value ---\n";
     byValue(x);   // T=int, param=int
-    byValue(cx);  // T=int, param=int (const discarded)
+    byValue(cx);  // T=int, param=int
     byValue(rx);  // T=int, param=int
+    byValue(px);  // T=const int*, param=const int* (notice that the pointer is copied, but data is not).
+    byValue(cpx); // T=const int*, param=const int* (constness of the pointer is lost, but still points to a const int).
 
     std::cout << "\n--- Special case: Arrays ---\n";
     const char name[] = "Matias Data";
@@ -86,3 +89,29 @@ int main() {
 
     return 0;
 }
+
+/* 
+On a call like this:
+
+template<typename T>
+void f(ParamType param);
+f(expr);
+
+Case 1: ParamType is a reference (T&) or a pointer (T*).    
+Then the following rules apply: 
+    a) If expr’s type is a reference, ignore the reference part.
+    b) Then pattern-match expr’s type against ParamType to determine T.
+
+Case 2: ParamType is a universal reference (T&&). In a function template taking a
+type parameter T, a universal reference’s declared type is T&&, behavior is different for lvalues and rvalues.
+Then the following rules apply: 
+    a) If expr is an lvalue, both T and ParamType are deduced to be lvalue references.
+    b) If expr is an rvalue, the “normal” (i.e., Case 1) rules apply.
+
+Case 3: ParamType is Neither a Pointer nor a Reference (T).
+When ParamType is neither a pointer nor a reference, we’re dealing with pass-by-
+value. That means that param will be a copy of whatever is passed in—a completely new
+object. Then the following rules apply: 
+    a) As before, if expr’s type is a reference, ignore the reference part.
+    b) If, after ignoring expr’s reference-ness, expr is const, ignore that, too.
+*/
