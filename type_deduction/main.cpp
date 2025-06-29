@@ -24,6 +24,7 @@ void byConstRef(const T& param) {
     std::cout << ", param: " << type_name<decltype(param)>() << "\n";
 }
 
+
 template<typename T>
 void byPtr(T* param) {
     std::cout << "byPtr - T: " << type_name<T>();
@@ -43,6 +44,13 @@ void byValue(T param) {
     std::cout << "byValue - T: " << type_name<T>();
     std::cout << ", param: " << type_name<decltype(param)>() << "\n";
 }
+
+template<typename T>
+void byConstValue(const T param) {
+    std::cout << "byConstValue - T: " << type_name<T>();
+    std::cout << ", param: " << type_name<decltype(param)>() << "\n";
+}
+
 
 void someFunc(int, double) {}
 
@@ -86,6 +94,18 @@ int main() {
     std::cout << "\n--- Special case: Function Pointers ---\n";
     byValue(someFunc); // T=void (*)(int, double), param=void (*)(int, double)
     byRef(someFunc);   // T=void (int, double), param=void (&)(int, double)
+
+    // auto type deduction
+
+    auto y = 10;
+    std::cout << "Type of y: " << type_name<decltype(y)>() << "\n";
+    byValue(y); // matches the type deduced for param in this template function.
+    const auto cy = y;
+    std::cout << "Type of cy: " << type_name<decltype(cy)>() << "\n";
+    byConstValue(y); // matches the type deduced for param in this template function.
+    const auto& ry = y;
+    std::cout << "Type of ry: " << type_name<decltype(ry)>() << "\n";
+    byConstRef(y); // matches the type deduced for param in this template function.
 
     return 0;
 }
