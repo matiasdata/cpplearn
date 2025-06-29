@@ -33,8 +33,8 @@ void byPtr(T* param) {
 
 // 2. Universal Reference
 template<typename T>
-void universalRef(T&& param) {
-    std::cout << "universalRef - T: " << type_name<T>();
+void byUniversalRef(T&& param) {
+    std::cout << "byUniversalRef - T: " << type_name<T>();
     std::cout << ", param: " << type_name<decltype(param)>() << "\n";
 }
 
@@ -74,10 +74,10 @@ int main() {
     byPtr(px); // T is const int, param's type is const int*
 
     std::cout << "\n--- Case 2: Universal Reference ---\n";
-    universalRef(x);   // T=int&, param=int&
-    universalRef(cx);  // T=const int&, param=const int&
-    universalRef(rx);  // T=const int&, param=const int&
-    universalRef(42);  // T=int, param=int&& (rvalue)
+    byUniversalRef(x);   // T=int&, param=int&
+    byUniversalRef(cx);  // T=const int&, param=const int&
+    byUniversalRef(rx);  // T=const int&, param=const int&
+    byUniversalRef(42);  // T=int, param=int&& (rvalue)
 
     std::cout << "\n--- Case 3: Pass-by-value ---\n";
     byValue(x);   // T=int, param=int
@@ -95,17 +95,34 @@ int main() {
     byValue(someFunc); // T=void (*)(int, double), param=void (*)(int, double)
     byRef(someFunc);   // T=void (int, double), param=void (&)(int, double)
 
-    // auto type deduction
+    std::cout << "\n--- auto Type Deduction ---\n";
 
+    std::cout << "\n--- Case 1 or Case 3 ---\n";
+    // Case 1 or Case 3 template type deduction
     auto y = 10;
     std::cout << "Type of y: " << type_name<decltype(y)>() << "\n";
-    byValue(y); // matches the type deduced for param in this template function.
+    byValue(y); // matches the type deduced for param in this template function. Case 3.
     const auto cy = y;
     std::cout << "Type of cy: " << type_name<decltype(cy)>() << "\n";
-    byConstValue(y); // matches the type deduced for param in this template function.
+    byConstValue(y); // matches the type deduced for param in this template function. Case 3.
     const auto& ry = y;
     std::cout << "Type of ry: " << type_name<decltype(ry)>() << "\n";
-    byConstRef(y); // matches the type deduced for param in this template function.
+    byConstRef(y); // matches the type deduced for param in this template function. Case 1.
+
+
+    std::cout << "\n--- Case 2 ---\n";
+    auto&& uref1 = x;
+    std::cout << "Type of uref1: " << type_name<decltype(uref1)>() << "\n";
+    byUniversalRef(x);
+    auto&& uref2 = cx;
+    std::cout << "Type of uref2: " << type_name<decltype(uref2)>() << "\n";
+    byUniversalRef(cx);
+    auto&& uref3 = rx;
+    std::cout << "Type of uref3: " << type_name<decltype(uref3)>() << "\n";
+    byUniversalRef(rx);
+    auto&& uref4 = 10;
+    std::cout << "Type of uref4: " << type_name<decltype(uref4)>() << "\n";
+    byUniversalRef(10);
 
     return 0;
 }
