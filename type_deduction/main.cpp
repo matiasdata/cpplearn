@@ -135,20 +135,26 @@ void f(ParamType param);
 f(expr);
 
 Case 1: ParamType is a reference (T&) or a pointer (T*).    
-Then the following rules apply: 
+Then the following rules apply to both template parameters and auto declarations: 
     a) If expr’s type is a reference, ignore the reference part.
     b) Then pattern-match expr’s type against ParamType to determine T.
 
 Case 2: ParamType is a universal reference (T&&). In a function template taking a
-type parameter T, a universal reference’s declared type is T&&, behavior is different for lvalues and rvalues.
+type parameter T, a universal reference’s declared type is T&&, behavior is different for lvalues and rvalues. 
+This applies only when using templates  or when declaring a variable as "auto&& var = expr;"  (known as a forwarding reference)
+
 Then the following rules apply: 
     a) If expr is an lvalue, both T and ParamType are deduced to be lvalue references.
     b) If expr is an rvalue, the “normal” (i.e., Case 1) rules apply.
 
 Case 3: ParamType is Neither a Pointer nor a Reference (T).
 When ParamType is neither a pointer nor a reference, we’re dealing with pass-by-
-value. That means that param will be a copy of whatever is passed in—a completely new
+value. That means that param (or the auto-declared variable) will be a copy of whatever is passed in—a completely new
 object. Then the following rules apply: 
     a) As before, if expr’s type is a reference, ignore the reference part.
     b) If, after ignoring expr’s reference-ness, expr is const, ignore that, too.
+
+Observation: When the initializer for an auto-declared variable is enclosed in braces, 
+the deduced type is a std::initializer_list. This is usually a problem, unless you want an initializer list. E.g.:
+auto x = { 27 }; // type is std::initializer_list<int>, value is { 27 }
 */
