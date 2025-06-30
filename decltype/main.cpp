@@ -20,12 +20,17 @@ auto add(T1 a, T2 b) -> decltype(a + b) {
 // When using auto, reference-ness is dropped. Use decltype(auto) to preserve the exact type.
 template<typename T>
 decltype(auto) getRef(T& x) {
-        return x;  // returns int&
+        return x;  // returns int& (a reference, does not copy).
 }
 
 template<typename T>
 auto getVal(T& x) {
-        return x;  // returns int&
+        return x;  // returns int, makes a copy.
+}
+
+template<typename T>
+auto& getRef2(T& x) {
+        return x;  // returns int& (a reference, does not copy).
 }
 
 
@@ -42,4 +47,15 @@ int main()
     std::cout << "Type of y=add(a,b) is: " << type_name<decltype(y)>() << "\n";
     std::cout << "Type of getRef(x) is: " << type_name<decltype(getRef(x))>() << "\n";
     std::cout << "Type of getVal(x) is: " << type_name<decltype(getVal(x))>() << "\n";
+    std::cout << "Type of getRef2(x) is: " << type_name<decltype(getRef2(x))>() << "\n";
 }
+
+/*
+Common Uses of decltype:
+- To get the exact type of an expression, including const/ref qualifiers.
+- To deduce complex return types in function templates.
+- To preserve reference-ness via decltype(auto) in return statements or declarations.
+- Prefer decltype(auto) over auto when you want decltype-style type deduction.
+- auto uses template type deduction rules, so if the returned value is a reference, the reference is usually stripped.
+- Watch out for decltype((x)) vs decltype(x): the first gives a reference!
+*/
