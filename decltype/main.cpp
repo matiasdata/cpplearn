@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <boost/type_index.hpp>
+using boost::typeindex::type_id_with_cvr;
 
 template <typename T>
 std::string type_name() {
@@ -54,8 +56,9 @@ int main()
     std::cout << "Type of getRef(x) is: " << type_name<decltype(getRef(x))>() << "\n";
     std::cout << "Type of getVal(x) is: " << type_name<decltype(getVal(x))>() << "\n";
     std::cout << "Type of getRef2(x) is: " << type_name<decltype(getRef2(x))>() << "\n";
-    std::cout << "Type of rx: " << typeid(rx).name() << "\n";  // not sensible to references.
+    std::cout << "Type of rx: " << typeid(rx).name() << "\n";  // ignores references, compiler dependent.
     std::cout << "Type of px: " << typeid(px).name() << "\n"; // PKi means pointer (P) to const (K) int (i).
+    std::cout << "Type of rx with boost: " << type_id_with_cvr<decltype(rx)>().pretty_name() << "\n";
     // TD<decltype(b)> bType; // error: incomplete type "TD<int &>" is not allowed
 }
 
