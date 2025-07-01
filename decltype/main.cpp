@@ -43,6 +43,8 @@ int main()
     int x = 10;
     decltype(x) a = x;      // a is int
     decltype((x)) b = x;    // b is int& (notice the parentheses)
+    const int * px = &x;
+    const int& rx = x;
 
     std::cout << "Type of x is: " << type_name<decltype(x)>() << "\n";
     std::cout << "Type of a is: " << type_name<decltype(a)>() << "\n";
@@ -52,7 +54,9 @@ int main()
     std::cout << "Type of getRef(x) is: " << type_name<decltype(getRef(x))>() << "\n";
     std::cout << "Type of getVal(x) is: " << type_name<decltype(getVal(x))>() << "\n";
     std::cout << "Type of getRef2(x) is: " << type_name<decltype(getRef2(x))>() << "\n";
-    //TD<decltype(b)> bType; 
+    std::cout << "Type of rx: " << typeid(rx).name() << "\n";
+    std::cout << "Type of px: " << typeid(px).name() << "\n";
+    // TD<decltype(b)> bType; // error: incomplete type "TD<int &>" is not allowed
 }
 
 /*
