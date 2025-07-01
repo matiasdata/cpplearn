@@ -33,6 +33,10 @@ auto& getRef2(T& x) {
         return x;  // returns int& (a reference, does not copy).
 }
 
+template <typename T>
+class TD; // TD = "Type Displayer".
+// if you try to instantiate an object of class TD it will return an error as the class is declared but undefined.
+// The IDE will elicit an error message with the type of T.
 
 int main()
 {
@@ -48,6 +52,7 @@ int main()
     std::cout << "Type of getRef(x) is: " << type_name<decltype(getRef(x))>() << "\n";
     std::cout << "Type of getVal(x) is: " << type_name<decltype(getVal(x))>() << "\n";
     std::cout << "Type of getRef2(x) is: " << type_name<decltype(getRef2(x))>() << "\n";
+    //TD<decltype(b)> bType; 
 }
 
 /*
