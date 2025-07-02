@@ -39,7 +39,14 @@ int main()
         std::vector<int>::iterator::value_type val = *it;
         std::cout << "Value: " << val << "\n";
     }
-    
+
+    // Auto
+    auto doubler = [](int n) { return n * 2; };
+    std::cout << "Auto closure: " << doubler(10) << "\n";
+
+    // Without Auto
+    std::function<int(int)> doubler2 = [](int n) { return n * 2; };
+    std::cout << "Manual closure: " << doubler2(10) << "\n";
 
 
 }
