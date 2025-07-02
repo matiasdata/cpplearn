@@ -16,4 +16,30 @@ int main()
     // auto x; // error, must be initialized.
     auto x = 10; // ok, type is int
     std::cout << "Type of x: " << type_id_with_cvr<decltype(x)>().pretty_name() << "\n";
+
+    // making code more portable.
+    std::vector<int> v = {1, 2, 3, 4};
+    auto sz = v.size(); // Better than unsigned or size_t (portable)
+    std::cout << "Vector size: " << sz << "\n";
+    std::cout << "Vector size type: " << type_id_with_cvr<decltype(sz)>().pretty_name() << "\n";
+
+    // avoiding writing long/complex types automatically deduced by context.
+
+    std::cout << "Iterating over a vector with auto:\n";
+    for(auto it = v.begin(); it != v.end(); ++it)
+    {
+        auto val = *it;
+        std::cout << "Value: " << val << "\n";
+    }
+
+    // compare with the following code.
+    std::cout << "Iterating over a vector without auto:\n";
+    for(std::vector<int>::iterator it = v.begin(); it != v.end(); ++it)
+    {
+        std::vector<int>::iterator::value_type val = *it;
+        std::cout << "Value: " << val << "\n";
+    }
+    
+
+
 }
