@@ -43,10 +43,12 @@ int main()
     // Auto
     auto doubler = [](int n) { return n * 2; };
     std::cout << "Auto closure: " << doubler(10) << "\n";
+    std::cout << "Type of doubler: " << type_id_with_cvr<decltype(doubler)>().pretty_name() << "\n";
 
     // Without Auto
     std::function<int(int)> doubler2 = [](int n) { return n * 2; };
     std::cout << "Manual closure: " << doubler2(10) << "\n";
+    std::cout << "Type of doubler2: " << type_id_with_cvr<decltype(doubler2)>().pretty_name() << "\n";
 
 
 }
