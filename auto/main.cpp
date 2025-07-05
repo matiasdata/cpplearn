@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
+#include <functional>
 #include <boost/type_index.hpp>
 using boost::typeindex::type_id_with_cvr;
 
@@ -77,7 +79,43 @@ int main()
     std::cout << "cmpGenericAuto: " <<  std::boolalpha << cmpGenericAuto(w1, w2) << "\n";
     std::cout << "Type of cmpGenericAuto: " << type_id_with_cvr<decltype(cmpGenericAuto)>().pretty_name() << "\n";
     
+    std::cout << "\n----- Map iteration -----\n";
+    std::unordered_map<std::string, int> myMap = {{"one", 1}, {"two", 2}, {"three", 3}};
+
+        
+    // Manual (incorrect type — key is const)
+    // for (const std::pair<std::string, int>& p : myMap) {
+    //     std::cout << "[Wrong] Key: " << p.first << ", Value: " << p.second << "\n";
+    // }
+    /* warning: loop variable 'p' of type 'const std::pair<std::string, int> &' (aka 'const pair<basic_string<char>, int> &') 
+    binds to a temporary constructed from type 'reference' (aka 'pair<const std::string, int> &') [-Wrange-loop-construct] */
+
+    // Important: keys of an unordered_map are const.
     
+    std::cout << "Manual (correct type — key is const)\n";
+    for (const std::pair<const std::string, int>& p : myMap) {
+        std::cout << "Key: " << p.first << ", Value: " << p.second << "\n";
+    }
+    
+    std::cout << "Auto (correct const-ness)\n";
+    for (const auto& p : myMap) {
+        std::cout << "Key: " << p.first << ", Value: " << p.second << "\n";
+    }
 
+    std::cout << "Auto with structure bindings\n";
+    for (const auto& [k,v] : myMap) {
+        std::cout << "Key: " << k << ", Value: " << v << "\n";
+    }
 
+    // Structured bindings allow you to unpack a tuple-like object
+    // (such as std::pair, std::tuple, or a struct) into named variables directly.
+
+    std::vector<bool> features{true,false,true,false};
+
+    auto myNotBool = features[0]; // problem: std::vector<bool> does not return bool references with operator[]
+    std::cout << "Type of myNotBool: " << type_id_with_cvr<decltype(myNotBool)>().pretty_name() << "\n";
+    auto myBool = static_cast<bool>(features[0]);
+    bool myBool2 = features[0];
+    std::cout << "Type of myBool: " << type_id_with_cvr<decltype(myBool)>().pretty_name() << "\n";
+    std::cout << "Type of myBool2: " << type_id_with_cvr<decltype(myBool2)>().pretty_name() << "\n";
 }
