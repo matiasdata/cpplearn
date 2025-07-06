@@ -7,6 +7,14 @@ class Widget
 public:
     Widget(){}
     Widget(int x_,int y_, int z_) : x{x_}, y{y_},z{z_} {}
+    Widget(std::initializer_list<int> il)
+    {
+        std::cout << "Calling initializer_list constructor\n";
+        auto it = il.begin();
+        x = (it != il.end())? *it++ : 0;
+        y = (it != il.end())? *it++ : 0;
+        z = (it != il.end())? *it++ : 0;
+    }
     int getx(){return x;}
     int gety(){return y;}
     int getz(){return z;}
@@ -44,7 +52,7 @@ int main()
     Widget w1; // default constructor
     std::cout << "w1: ";
     w1.printWidget();
-    Widget w2{1,2,3};
+    Widget w2{1,2,3}; // will call the initializer list constructor if implemented!
     std::cout << "w2: ";
     w2.printWidget();
     Widget w3(); // most vexing parse! declares a function named w2 that returns a Widget!
@@ -58,7 +66,18 @@ int main()
     std::cout << "Type of w3: " << type_id_with_cvr<decltype(w3)>().pretty_name() << "\n";
 
     Widget w4{};
+    std::cout << "w4: ";
     w4.printWidget();
     std::cout << "Type of w4: " << type_id_with_cvr<decltype(w4)>().pretty_name() << "\n";
+    Widget w5(1,2,3); // will call the second constructor.
+    std::cout << "w5: ";
+    w5.printWidget();
+    // Widget w6(1,2); // error: no instance of constructor "Widget::Widget" matches the argument list
+    Widget w6{1,2}; // works fine, not initialized variables will be zero.
+    std::cout << "w6: ";
+    w6.printWidget();
+    Widget w7{1,2,3,4}; // caution: extra variables will be ignored.
+    std::cout << "w7: ";
+    w7.printWidget();
     return 0;
 }
