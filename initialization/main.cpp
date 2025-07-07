@@ -1,6 +1,8 @@
 #include <iostream>
+#include <vector>
 #include <boost/type_index.hpp>
 using boost::typeindex::type_id_with_cvr;
+
 
 class Widget
 {
@@ -79,5 +81,22 @@ int main()
     Widget w7{1,2,3,4}; // caution: extra variables will be ignored.
     std::cout << "w7: ";
     w7.printWidget();
+    
+    std::vector<int> v1(10,20); // non-std::initializer_list ctor: creates a size 10 vector with value 20 in all positions.
+    std::vector<int> v2{10,20}; // std::initializer_list ctor: creates a size 2 vector with values {10,20}.
+    std::cout << "\nv1: ";
+    for(auto& x : v1) std::cout << x << " ";
+    std::cout << "\nv2: ";
+    for(auto& x : v2) std::cout << x << " ";
+    std::cout << "\n";
+
     return 0;
 }
+
+/* std::initializer_list<T> is a lightweight wrapper over an array of const T*, designed for brace-enclosed initializer syntax.
+- Enables brace-based initialization (e.g., Widget w{1, 2, 3};).
+- Used when writing constructors or functions that accept a fixed list of values.
+- Lightweight, immutable view over a sequence of constant elements.
+- Avoids dynamic memory allocation (unlike std::vector).
+- Offers cleaner syntax and better performance for small, read-only sequences.
+*/
