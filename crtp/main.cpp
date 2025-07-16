@@ -35,6 +35,37 @@ private:
     std::string name;
 };
 
+// Second example 
+template <typename Derived>
+class Base
+{
+public:
+    Base() = default; // prohibit the creation of Base objects
+    void compute(double& x)
+    {
+        static_cast<Derived*>(this)->impl(x);
+    }
+};
+
+class addOne : public Base<addOne>
+{
+public:
+    addOne(){};
+    void impl(double& x){x += 1.0;}
+};
+
+class multTwo : public Base<multTwo>
+{
+public:
+    multTwo(){};
+    void impl(double& x){x *= 2.0;}
+};
+
+
+
+
+
+
 
 int main()
 {
@@ -47,7 +78,16 @@ int main()
     Equity e2("AMZN");
     std::cout << "Bond count: " << Bond::getCount() << "\n";
     std::cout << "Equity count: " << Equity::getCount() << "\n";
+    double x = 4.0;
+    std::cout << "x = " << x  << "\n";
+    addOne addOneCalc;
+    multTwo multTwoCalc;
+    addOneCalc.compute(x); // calls the compute implementation defined in the subclass addOne
+    std::cout << "x = " << x  << "\n";
+    multTwoCalc.compute(x); // calls the compute implementation defined in the subclass multTwo
+    std::cout << "x = " << x  << "\n";
 }
+
 
 /*
 ===============================
