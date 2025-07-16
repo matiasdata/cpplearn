@@ -40,11 +40,14 @@ template <typename Derived>
 class Base
 {
 public:
-    Base() = default; // prohibit the creation of Base objects
+
     void compute(double& x)
     {
         static_cast<Derived*>(this)->impl(x);
     }
+protected:
+    Base() = default; 
+    // constructor is protected to prohibit the creation of Base objects, so that it is accessible to derived classes.
 };
 
 class addOne : public Base<addOne>
