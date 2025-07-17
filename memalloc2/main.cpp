@@ -52,6 +52,13 @@ int main()
     return 0;
 }
 
-// Your global operator new only captures explicit `new` allocations.
-// std::string may not allocate heap memory due to Small String Optimization (SSO).
-// Use a longer string to force dynamic memory allocation and test your hook.
+// AllocationMetrics uses only static methods and data.
+// No instance of the class is ever created.
+// Static data (TotalAllocated/Freed) is shared globally across the program.
+// Static methods can be called via class name without any object.
+// `inline static` (C++17) allows definition inside the header directly.
+
+// The constructor of AllocationMetrics is never called,
+// because no instance of the class is ever created.
+// All members used are static, accessed via the class itself.
+// Constructors only run when an object is constructed — which we never do.
