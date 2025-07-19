@@ -30,14 +30,25 @@ public:
 We aim to do this instead with Concepts
 */
 
-class AnimalTag{};
+class AnimalTag{}; 
+// AnimalTag is an empty class, only to guarantee we are creating an Animal and not
+// just a class with a make_sound() function, which could be say a musical instrument
 
 template <typename T>
 concept Animal = 
     requires (T animal) {animal.make_sound();} &&
     std::derived_from<T,AnimalTag>;
 
-void print(Animal auto const& animal)
+
+
+template <Animal T>
+void print(const T& animal)
+{
+    animal.make_sound();
+}
+
+// syntactic sugar version instead of templatized code.
+void printauto(Animal auto const& animal)
 {
     animal.make_sound();
 }
@@ -60,4 +71,6 @@ int main()
     Sheep roshi;
     print(betty);
     print(roshi);
+    printauto(betty);
+    printauto(roshi);
 }
