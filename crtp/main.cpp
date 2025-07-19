@@ -65,6 +65,30 @@ public:
 };
 
 
+// Third example
+template <typename Derived>
+class Animal
+{
+public:
+    void make_sound() const
+    {
+        static_cast<const Derived&>(*this).impl();
+    }
+protected:
+    Animal() = default;
+};
+
+class Cow : public Animal<Cow>
+{
+public:
+    void impl() const{std::cout << "moo\n";}
+};
+
+class Sheep : public Animal<Sheep>
+{
+public:
+    void impl() const{std::cout << "baa\n";}
+};
 
 
 
@@ -72,6 +96,7 @@ public:
 
 int main()
 {
+    // first example
     Bond b1("UST10Y");
     Bond b2("FR2Y");
     Equity e1("BA");
@@ -81,6 +106,8 @@ int main()
     Equity e2("AMZN");
     std::cout << "Bond count: " << Bond::getCount() << "\n";
     std::cout << "Equity count: " << Equity::getCount() << "\n";
+
+    // second example
     double x = 4.0;
     std::cout << "x = " << x  << "\n";
     addOne addOneCalc;
@@ -89,6 +116,12 @@ int main()
     std::cout << "x = " << x  << "\n";
     multTwoCalc.compute(x); // calls the compute implementation defined in the subclass multTwo
     std::cout << "x = " << x  << "\n";
+
+    // third example
+    Cow betty;
+    Sheep roshi;
+    betty.make_sound();
+    roshi.make_sound();
 }
 
 
