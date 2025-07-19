@@ -72,6 +72,7 @@ class Animal
 public:
     void make_sound() const
     {
+        std::cout << "The animal is about to make a sound:\n";
         static_cast<const Derived&>(*this).impl();
     }
 protected:
