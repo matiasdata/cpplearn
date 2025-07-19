@@ -90,6 +90,11 @@ public:
     void impl() const{std::cout << "baa\n";}
 };
 
+template <typename Derived>
+void print(Animal<Derived> animal)
+{
+    animal.make_sound();
+}
 
 
 
@@ -122,6 +127,8 @@ int main()
     Sheep roshi;
     betty.make_sound();
     roshi.make_sound();
+    print(betty);
+    print(roshi);
 }
 
 
