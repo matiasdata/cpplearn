@@ -9,6 +9,14 @@ void print(int* arr, unsigned long size)
 
 }
 
+
+// return size of an array as a compile-time constant.
+template <typename T, std::size_t N>
+constexpr std::size_t arraySize(T (&)[N]) noexcept
+{
+    return N;
+}
+
 int main()
 {
     int arr[5]={0,1,2,3,4}; // allocate an array of five elements (on the stack)
@@ -29,6 +37,9 @@ int main()
     std::cout << "Size of the array arr: " << sizeof(arr) << " = 5 * sizeof(int) "<< "\n";
     std::cout << "Size of int* p: " << sizeof(ptr) << "\n";
     // reassignment of arrays is illegal, however pointers can be reassigned freely.
+
+    std::cout << "Size of the array arr with arraySize: " << arraySize(arr) << "\n";
+    // std::cout << "Size of the ptr with arraySize: " << arraySize(ptr) << "\n"; // error
 
     // Arrays decay to pointers when passed to functions — you lose size info.
     print(arr,5);
