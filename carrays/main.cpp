@@ -49,7 +49,6 @@ int main()
     int* px = &x;
     std::cout << "px: " << px  << ", x: " << *px << "\n";
     std::cout << "px+1: " << px+1 << ", *(px+1): " << *(px+1) << "\n"; 
-    // illegal px+1 is unassigned, gives undefined behavior. 
-
+    // illegal px+1 is unassigned, gives undefined behavior.     
     return 0;
 }
