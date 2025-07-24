@@ -118,6 +118,15 @@ Called MyString constructor
 Called MyString Copy assignment
 Called MyString destructor
 
+1) the strings theName and theAddress are default constructed as empty strings.
+2) the std::string name is used to create a MyString by calling the ctor that takes a string,
+3) theName is copy assigned to this string
+4) the auxiliary MyString is destructed.
+5) the std::string address is used to create a MyString by calling the ctor that takes a string,
+6) theAddress is copy assigned to this string
+7) the auxiliary MyString is destructed.
+
+
 whit the efficient constructor
 ABEntry theEntry("Matias","416 Manchester Road",{4407469658107});
 prints:
