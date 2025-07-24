@@ -57,13 +57,13 @@ int main()
     Widget w2{1,2,3}; // will call the initializer list constructor if implemented!
     std::cout << "w2: ";
     w2.printWidget();
-    Widget w3(); // most vexing parse! declares a function named w2 that returns a Widget!
+    Widget w3(); // most vexing parse! declares a function named w3 that returns a Widget!
     /*
     main.cpp:45:14: warning: empty parentheses interpreted as a function declaration [-Wvexing-parse]
-    Widget w2(); // most vexing parse! declares a function named w2 that returns a Widget!
+    Widget w3(); // most vexing parse! declares a function named w3 that returns a Widget!
 
     note: replace parentheses with an initializer to declare a variable
-    Widget w2(); // most vexing parse! declares a function named w2 that returns a Widget!
+    Widget w3(); // most vexing parse! declares a function named w3 that returns a Widget!
     */
     std::cout << "Type of w3: " << type_id_with_cvr<decltype(w3)>().pretty_name() << "\n";
 
