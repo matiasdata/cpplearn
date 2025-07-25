@@ -71,7 +71,7 @@ private:
     int numTimesConsulted;
 };
 
-// inefficient, does not initialize variables thus default initializers are called and then they are copy assigned.
+//inefficient, does not initialize variables thus default initializers are called and then they are copy assigned.
 // ABEntry::ABEntry(const std::string& name, 
 //     const std::string& address, 
 //     const std::list<PhoneNumber>& phones)
@@ -109,28 +109,20 @@ int main()
 with the inefficient constructor
 ABEntry theEntry("Matias","416 Manchester Road",{4407469658107});
 prints:
-Called MyString default constructor
-Called MyString default constructor
-Called MyString constructor
-Called MyString Copy assignment
-Called MyString destructor
-Called MyString constructor
-Called MyString Copy assignment
-Called MyString destructor
-
-1) the strings theName and theAddress are default constructed as empty strings.
-2) the std::string name is used to create a MyString by calling the ctor that takes a string,
-3) theName is copy assigned to this string
-4) the auxiliary MyString is destructed.
-5) the std::string address is used to create a MyString by calling the ctor that takes a string,
-6) theAddress is copy assigned to this string
-7) the auxiliary MyString is destructed.
+Called MyString default constructor         // the string theName is default constructed.
+Called MyString default constructor         // the string.theAddress is default constructed.
+Called MyString constructor                 // the string name is used to create a MyString by calling the ctor that takes a string.
+Called MyString Copy assignment             // theName is copy assigned to this string.
+Called MyString destructor                  // the auxiliary created MyString is destructed.
+Called MyString constructor                 // the string name is used to create a MyString by calling the ctor that takes a string.
+Called MyString Copy assignment             // theName is copy assigned to this string.
+Called MyString destructor                  // the string name is used to create a MyString by calling the ctor that takes a string.
 
 
 whit the efficient constructor
 ABEntry theEntry("Matias","416 Manchester Road",{4407469658107});
 prints:
-Called MyString constructor
-Called MyString constructor
+Called MyString constructor                 // the string theName is initialized with the ctor that takes a string.
+Called MyString constructor                 // the string theAddress is initialized with the ctor that takes a string.
 
 */
