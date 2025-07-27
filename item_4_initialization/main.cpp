@@ -125,4 +125,17 @@ prints:
 Called MyString constructor                 // the string theName is initialized with the ctor that takes a string.
 Called MyString constructor                 // the string theAddress is initialized with the ctor that takes a string.
 
+
+Things to Remember:
+
+     * Manually initialize objects of built-in type, because C++ only
+    sometimes initializes them itself.
+
+     * In a constructor, prefer use of the member initialization list to 
+    assignment inside the body of the constructor. List data members in
+    the initialization list in the same order they’re declared in the class.
+
+    * Avoid initialization order problems across translation units by replacing
+    non-local static objects with local static objects.
+
 */
