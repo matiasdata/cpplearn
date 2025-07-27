@@ -16,6 +16,58 @@ int& counter()
     return count;
 }
 // static variables inside functions are local static variables.
+// These are initialized when they are called, and are destructed at the end of the program.
+
+class MyTalkingInt
+{
+public:
+    MyTalkingInt(int x_) : x{x_} {std::cout << "Created MyTalkingInt!\n";}
+    ~MyTalkingInt(){std::cout << "Destructed MyTalkingInt\n";}
+    int& operator++()
+    {
+        ++x;
+        return x;
+    }
+    int& get(){return x;}
+private: 
+    int x{0};
+};
+
+class MyClass
+{
+public:
+    MyClass()
+    {
+        ++TotalCreated;
+        std::cout << "Created MyClass!\n";
+    };
+    ~MyClass()
+    {
+        std::cout << "Deleted MyClass!\n";
+    }
+    inline static MyTalkingInt TotalCreated{0}; // static
+};
+
+// static data members inside classes are non-local static objects.
+// They are created before main and destructed at the end of the program.
+// Before C++17 you jad to define as follows:
+/* 
+class MyClass
+{
+public:
+    MyClass()
+    {
+        ++TotalCreated;
+        std::cout << "Created MyClass!\n";
+    };
+    ~MyClass()
+    {
+        std::cout << "Deleted MyClass!\n";
+    }
+    static MyTalkingInt TotalCreated; // static
+};
+MyTalkingInt MyClass::TotalCreated{0};
+*/
 
 
 int main()
@@ -26,6 +78,9 @@ int main()
     std::cout << "myConstants::PI: " << myConstants::PI << "\n";
     std::cout << "tempInt: " << tempInt << "\n";
     std::cout << "counter():"  << counter() << "\n";
+    MyClass firstInstance;
+    MyClass secondInstance;
+    std::cout << "Total created: " << MyClass::TotalCreated.get() << "\n";
 
 }
 
