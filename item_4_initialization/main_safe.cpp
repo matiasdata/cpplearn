@@ -9,13 +9,13 @@ int main()
 }
 
 /*
-If compiled it prints:
-FileSystem constructed!
-Directory constructed using 1disks.
-Main started.
+Singleton pattern helps us out of this conundrum.
+When we replace non-local static objects (such as tfs and tempDir before) with local static objects 
+inside a function that returns a reference to such object, these are guaranteed to be constructed once
+and when the function call happens, it is even thread safe.
 
-But it might also crash or get garbage output, 
-depending on how tempDir and tfs are ordered by the linker. 
-The initialization order of these non-local static variables is undefined.
-
+Solution; Replace direct accesses to non-local static objects 
+with calls to functions that return references to local
+static objects, you’re guaranteed that the references you get back will
+refer to initialized objects.
 */
