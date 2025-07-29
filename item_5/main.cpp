@@ -18,6 +18,18 @@ private:
 // if there is at least one constructor (in this case there are two), 
 // then no default constructor will be defined by the compiler
 
+
+template <typename T>
+class NamedObjectRef
+{
+public:
+    NamedObjectRef(std::string& name, const T& value) : theName{name}, theObject{value} {}
+    void print() {std::cout << "Name: " << theName << ", Age: " << theObject << "\n";}
+private:
+    std::string& theName;
+    const T theObject;
+};
+
 int main()
 {
     NamedObject<int> p("Olive",10);
@@ -34,5 +46,40 @@ int main()
     std::cout << "Calling copy assignment \n t = *ptr\n";
     t = *ptr;
     t.print();
+
+    std::string olive("Olive");
+    std::string freddie("Freddie");
+    NamedObjectRef<int> pr(olive,10);
+    NamedObjectRef<int> sr(freddie,11);
+    // pr = sr; // error operator= cannot be referenced, it is a deleted function. 
+    // You can't reassign references or const objects, so the compiler deletes this functions.
+
+    NamedObjectRef<int> tr(pr); 
+    // copy constructor is generated, because you can initialize references and const objects 
+    // but you can't reassign these.
+    tr.print();
+
+
     // Compiler also generates destructor for both p, s and t.
+
+
 }
+
+
+/*
+ * Item 5 Summary:
+ * - If you declare no constructor at all, the compiler generates a default constructor.
+ * - If you declare at least one constructor (like we do here), no default constructor is provided.
+ * - If you do not declare a copy constructor or assignment operator, the compiler generates them **if needed**.
+ * - The generated copy constructor and assignment operator perform **member-wise copy**.
+ * - For std::string and other user-defined types, the corresponding copy constructor/operator is called.
+ * - For built-in types (like int), bitwise copy is used.
+ * - Destructor is always generated if not declared, and is **non-virtual** 
+ * unless the class inherits from a base class with a virtual destructor.
+ *
+ * NOTE:
+ * - If the class contains a `const` or reference member, the compiler **will NOT** generate copy assignment operator,
+ *   because those members cannot be reassigned after construction.
+ *  You can't
+ * 
+ */
