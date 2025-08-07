@@ -53,7 +53,7 @@ public:
         // str = new char[len+1];
         // strcpy(str,other);
         // return *this;
-        char* pOrig = str; // alternative: do a sort of swap, this can be exception safe if new throws an exception.
+        char* pOrig = str; // alternative: do a manual swap, this can be exception safe if new throws an exception.
         size_t len = strlen(other);
         str = new char[len+1];
         strcpy(str,other);
