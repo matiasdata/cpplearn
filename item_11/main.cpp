@@ -53,6 +53,7 @@ public:
         // str = new char[len+1];
         // strcpy(str,other);
         // return *this;
+        if(str == other) return *this; // keep this line only for efficiency purposes, so that self-assignment is done faster.
         char* pOrig = str; // alternative: do a manual swap, this can be exception safe if new throws an exception.
         size_t len = strlen(other);
         str = new char[len+1];
