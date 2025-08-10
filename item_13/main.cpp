@@ -64,7 +64,7 @@ void sharedptrExample()
 {
     std::cout << "Calling Shared Pointer Example\n";
     try{
-        std::shared_ptr<Investment> pInv(createInvestment("stock")); // call factory function
+        std::shared_ptr<Investment> pInv(createInvestment("bond")); // call factory function
         throw std::runtime_error("Something went wrong!"); // simulate exception
     }
     catch(const std::exception& e)
