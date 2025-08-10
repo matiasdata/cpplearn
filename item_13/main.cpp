@@ -90,11 +90,32 @@ unique_ptr and shared_ptr use RAII (Resource Acquisition Is Initialization): the
 ensuring resources are freed even if an exception is thrown. Resources are correctly released, regardless of how
 control leaves a block.
 
+===================== KEY POINTS =====================
+
+1. Raw pointers require manual memory management.
+   - If an exception or early return happens before 'delete', memory leaks occur.
+   - High maintenance cost, easy to forget cleanup.
+
+2. std::unique_ptr (single ownership):
+   - Automatically deletes the resource when going out of scope.
+   - Prevents leaks even with exceptions or early returns.
+   - Cannot be copied (ownership is unique), but can be moved.
+
+3. std::shared_ptr (shared ownership):
+   - Reference counting ensures object is deleted only when the last shared_ptr goes out of scope.
+   - Safer when multiple objects share the same resource.
+   - Slightly more overhead due to reference counting.
+
+4. Best Practice:
+   - Use RAII: Acquire resource, wrap it immediately in a smart pointer.
+   - Prefer std::unique_ptr by default; use std::shared_ptr only when shared ownership is required.
+   - Avoid raw pointers for ownership unless absolutely necessary.
+
+=======================================================
+
 
 Key takeaways:
     * To prevent resource leaks, use RAII objects that acquire resources
     in their constructors and release them in their destructors.
     * Two commonly useful RAII classes are std::unique_ptr and std::shared_ptr.
-    std::shared_ptr is usually the better choice, because its behavior when
-    copied is intuitive. Copying an std::unique_ptr sets it to null.
 */
