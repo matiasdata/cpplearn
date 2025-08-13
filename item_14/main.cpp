@@ -3,7 +3,7 @@
 #include <mutex>
 #include <string>
 
-/* Prohibit Copying */
+/* 1. Prohibit Copying */
 
 class Lock
 {
@@ -27,7 +27,7 @@ private:
     std::mutex* mtxPtr; // could also use a reference
 };
 
-/* Reference counting */
+/* 2. Reference counting */
 
 class SharedFile
 {
@@ -42,6 +42,27 @@ private:
 
 };
 
+/* 3. Deep Copy */
+
+class DeepCopyBuffer
+{
+public:
+    explicit DeepCopyBuffer(const std::string& data) : buffer{std::make_unique<std::string>(data)} {}
+    // Deep copy
+    DeepCopyBuffer(const DeepCopyBuffer& other) : buffer{ new std::string(*(other.buffer))} { }
+    DeepCopyBuffer& operator=(const DeepCopyBuffer& other)
+    {
+        if (this != &other)
+        {
+            *buffer = *(other.buffer);
+        }
+        return *this;
+    }
+    void print() const { std::cout << "Buffer: " << *buffer << "\n"; }
+private:
+    std::unique_ptr<std::string> buffer;
+};
+
 int main()
 {
     // 1. Prohibit copying
@@ -51,12 +72,21 @@ int main()
         // Lock lock2(lock1); // error
         // Lock lock2 = lock1; // error
     }
+    
     // 2. Reference counting
     {
         SharedFile f1("report.txt");
         SharedFile f2 = f1; // shares the same file
         f1.print();
         f2.print();
+    }
+
+    // 3. Deep copy
+    {
+        DeepCopyBuffer b1("Hello");
+        DeepCopyBuffer b2 = b1; // deep copy
+        b1.print();
+        b2.print();
     }
 }
 
