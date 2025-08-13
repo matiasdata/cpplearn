@@ -3,10 +3,12 @@
 #include <mutex>
 #include <string>
 
+/* Prohibit Copying */
+
 class Lock
 {
 public:
-    explicit Lock(std::mutex& rm) : mtxPtr{&rm} 
+    explicit Lock(std::mutex& rm) : mtxPtr{&rm} // explicit prevents any implicit conversions, must be called via direct call.
     {
         mtxPtr->lock(); // acquire the resource
         std::cout << "Mutex locked\n";
@@ -22,16 +24,39 @@ public:
     }
     
 private:
-    std::mutex* mtxPtr;
+    std::mutex* mtxPtr; // could also use a reference
+};
+
+/* Reference counting */
+
+class SharedFile
+{
+public:
+    explicit SharedFile(const std::string& name) : filePtr{std::make_shared<std::string>(name)} {}
+    void print() const 
+    {
+        std::cout << "Shared file: " << *filePtr << " (owners: " << filePtr.use_count() << ")\n";
+    }
+private:
+    std::shared_ptr<std::string> filePtr;
+
 };
 
 int main()
 {
+    // 1. Prohibit copying
     {
         std::mutex m;
         Lock lock1(m);
         // Lock lock2(lock1); // error
         // Lock lock2 = lock1; // error
+    }
+    // 2. Reference counting
+    {
+        SharedFile f1("report.txt");
+        SharedFile f2 = f1; // shares the same file
+        f1.print();
+        f2.print();
     }
 }
 
