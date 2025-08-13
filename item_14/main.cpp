@@ -63,6 +63,37 @@ private:
     std::unique_ptr<std::string> buffer;
 };
 
+/* 4. Transfer ownership */
+
+class MovableResource
+{
+public:
+    explicit MovableResource(const std::string& name) : resource{std::make_unique<std::string>(name)} {}
+
+    // Move constructor
+    MovableResource(MovableResource&& other) noexcept : resource{std::move(other.resource)} {}
+    MovableResource& operator=(MovableResource&& other) noexcept
+    {
+        if (this != &other)
+        {
+            resource = std::move(other.resource);
+        }
+        return *this;
+    }
+
+    void print() const 
+    {
+        if (resource)
+            std::cout << "Resource: " << *resource << "\n";
+        else
+            std::cout << "Resource moved away\n";
+    }
+
+private:
+    std::unique_ptr<std::string> resource;
+
+};
+
 int main()
 {
     // 1. Prohibit copying
@@ -72,7 +103,7 @@ int main()
         // Lock lock2(lock1); // error
         // Lock lock2 = lock1; // error
     }
-    
+
     // 2. Reference counting
     {
         SharedFile f1("report.txt");
@@ -88,6 +119,15 @@ int main()
         b1.print();
         b2.print();
     }
+
+    // 4. Transfer ownership
+    {
+        MovableResource r1("DB Connection");
+        MovableResource r2 = std::move(r1);
+        r1.print();
+        r2.print();
+    }
+
 }
 
 
