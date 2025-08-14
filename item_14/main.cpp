@@ -27,6 +27,27 @@ private:
     std::mutex* mtxPtr; // could also use a reference
 };
 
+void unlockMutex(std::mutex* m) {
+    std::cout << "Unlocking mutex\n";
+    m->unlock();
+}
+
+class LockSPtr
+{
+public:
+    explicit LockSPtr(std::mutex& rm) : mtxPtr{&rm,unlockMutex} 
+    {
+        mtxPtr->lock(); // acquire the resource
+        std::cout << "Mutex locked\n";
+    }
+    void print() const 
+    {
+        std::cout << "Mutex at address "<< mtxPtr << " owners: " << mtxPtr.use_count() << "\n";
+    }    
+private:
+    std::shared_ptr<std::mutex> mtxPtr; // could also use a reference
+};
+
 /* 2. Reference counting */
 
 class SharedFile
@@ -96,12 +117,23 @@ private:
 
 int main()
 {
-    // 1. Prohibit copying
+    // 1. Prohibit copying mutex
     {
         std::mutex m;
         Lock lock1(m);
         // Lock lock2(lock1); // error
-        // Lock lock2 = lock1; // error
+        //Lock lock2 = lock1; // error
+    }
+
+    // 2. Reference counting mutex
+    {
+        std::mutex m;
+        LockSPtr lock1(m);
+        LockSPtr lock2(lock1);
+        LockSPtr lock3 = lock1;
+        lock1.print();
+        lock2.print();
+        lock3.print();
     }
 
     // 2. Reference counting
