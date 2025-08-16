@@ -40,6 +40,38 @@ std::shared_ptr<Investment> createInvestment(const std::string& investimentId)
     throw std::invalid_argument("Unknown investment ID");
 }
 
+class SharedFile
+{
+public:
+    explicit SharedFile(const std::string& name) : filePtr{std::make_shared<std::string>(name)} {}
+    void print() const 
+    {
+        std::cout << "Shared file: " << *filePtr << " (owners: " << filePtr.use_count() << ")\n";
+    }
+    // suppose we need to work with some API that receives pointers to strings.
+    std::string* get() const // explicit conversion to an std::string*
+    {
+        return filePtr.get(); 
+    }
+    operator std::string*() const {return filePtr.get();} // implicit conversion to an std::string*
+private:
+    std::shared_ptr<std::string> filePtr;
+
+};
+
+// Function simulating an API that requires raw std::string*
+void capitalize(std::string* str)
+{
+    std::transform(str->begin(), str->end(), str->begin(),
+                   [](unsigned char c){return std::toupper(c);});
+}
+
+void underscore(std::string* str)
+{
+    std::transform(str->begin(), str->end(), str->begin(),
+                   [](unsigned char c){return std::tolower(c);});
+}
+
 int main()
 {
     std::shared_ptr<Investment> spInv(createInvestment("stock"));
@@ -48,5 +80,14 @@ int main()
                                                                  // to the daysHeld function (explicit conversion).
     (*spInv).increment(); // overload operator*
     std::cout << "Days held: " << daysHeld(spInv.get()) << "\n"; 
+
+    SharedFile theFile("report.txt");
+    theFile.print();
+
+    capitalize(theFile.get()); // explicit conversion called 
+    theFile.print();
+
+    underscore(theFile); // implicit conversion called
+    theFile.print();
 
 }
