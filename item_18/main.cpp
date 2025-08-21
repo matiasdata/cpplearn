@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdio>
+
 // BAD INTERFACE
 
 // class Socket
@@ -32,6 +34,24 @@ private:
     Protocol protocol;
 };
 
+// Safe RAII wrapper
+struct FileCloser
+{
+    FileCloser(){std::cout << "Calling FileCloser constructor\n";}
+    ~FileCloser(){std::cout << "Calling FileCloser destructor\n";}
+    void operator()(FILE* f) const 
+    {
+        if (f)
+        { 
+            std::cout << "Calling fclose on the file\n";
+            fclose(f);
+        }
+    }
+};
+
+using FileHandle = std::unique_ptr<FILE,FileCloser>;
+// The second parameter to the unique_ptr (FileCloser) is the deleter type, which defines how the resource should be freed.
+
 int main()
 {
     Socket s1 = Socket::tcp();
@@ -39,9 +59,15 @@ int main()
     s1.print();
     s2.print();
     // Socket s3(2); // error
+    FileHandle f(fopen("data.txt", "r"));
+    // File is always closed, even if exception is thrown.
 }
 
 /*
+
+In C++ there’s no semantic difference between struct and class except:
+    * By default, members in a struct are public.
+    * By default, members in a class are private.
 
 General Patterns:
     * Use strong types, enums, wrappers → avoids "magic numbers" and wrong argument order.
