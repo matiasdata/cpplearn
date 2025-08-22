@@ -24,7 +24,7 @@ public:
     }
     int getnum() const {return num;}
     int getden() const {return den;}
-    Rational& operator+(const Rational& other)
+    Rational& operator+=(const Rational& other)
     {
         int pden = den*other.den;
         int pnum = num*other.den + other.num*den;
@@ -59,6 +59,6 @@ int main() {
     std::cout << "r1 = " << r1 << "\n";
     Rational r2 = 3;                      // implicit int -> Rational(3/1)
     std::cout << "r2 = " << r2 << "\n";
-    Rational sum = r1 + r2;               // natural operator syntax
-    std::cout << "sum = " << sum << "\n";
+    r1 += r2;               // natural operator syntax
+    std::cout << "sum = " << r1 << "\n";
 }
