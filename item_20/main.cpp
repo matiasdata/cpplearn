@@ -55,12 +55,12 @@ private:
     std::string schoolAddress;
 };
 
-bool validateStudent(Student s, std::string school)
+bool validateStudent(Student s, std::string school) // innapropriate
 {
     return s.schoolName == school;
 }
 
-bool validateStudentConstRef(const Student& s, std::string school)
+bool validateStudentConstRef(const Student& s, std::string school) // appropriate
 {
     return s.schoolName == school;
 }
@@ -85,6 +85,10 @@ int main()
     std::cout << "Student validated: ";
     std::string val = b? "True" : "False";
     std::cout << val << "\n"; 
+    bool b2 = validateStudentConstRef(s,"ICL");
+    std::cout << "Student validated: ";
+    std::string val2 = b2? "True" : "False";
+    std::cout << val2 << "\n"; 
     printPersonByValue(s);
     printPersonByConstRef(s);
 }
