@@ -23,7 +23,7 @@ public:
         den = pden;
         return *this;
     }
-    friend Rational operator*(const Rational& lhs, const Rational& rhs);
+    friend inline const Rational operator*(const Rational& lhs, const Rational& rhs);
     friend std::ostream& operator<<(std::ostream& os, const Rational& r);
 private:
     int num, den;
@@ -52,14 +52,30 @@ private:
 // The below is also wrong, because it has a memory leak, memory is allocated in the heap that can never be deleted as the
 // user has no access to such pointers. At this point there’s no leak yet, because the object still exists in memory. 
 // But you, as the caller, have no pointer, only a const Rational&. That means you cannot delete it.
+
 // const Rational& operator*(const Rational& lhs, const Rational& rhs){ // buggy code
 //     Rational* pres = new Rational(lhs.num * rhs.num, lhs.den * rhs.den);
 //     return *pres;
 // }
 
-Rational operator*(const Rational& lhs, const Rational& rhs){
-    Rational result(lhs.num * rhs.num, lhs.den * rhs.den);
-    return result;
+
+// Also incorrect, return a static object. static means the variable lives for the lifetime of the program, not per call.
+// Every call to operator* reuses the same single object. All calls refer to the same underlying object, 
+// so earlier results are silently overwritten. With a static result, you don’t get independent objects. 
+// You get a shared mutable singleton — which is completely at odds with the mathematical idea of immutable numbers.
+// The static trick “works” only in the sense that the code compiles, but it violates the semantics of value types like numbers. 
+// It produces hidden shared state, breaks multi-use expressions, and is completely unsafe in multithreaded contexts.
+
+// const Rational& operator*(const Rational& lhs, const Rational& rhs){
+//     static Rational result(0,1);
+//     result = Rational(lhs.num * rhs.num, lhs.den * rhs.den);
+//     return result;
+// }
+
+// correct approach
+
+const Rational operator*(const Rational& lhs, const Rational& rhs){
+    return Rational(lhs.num * rhs.num, lhs.den * rhs.den);
 }
 
 
@@ -78,6 +94,14 @@ int main()
     std::cout << "z = x * y is equal to " << z << "\n";
     Rational w = x * y * z; // same as operator*(operator*(x, y), z)
     std::cout << "w = x * y * z is equal to " << w << "\n"; 
+
+    // Problems with the static approach.
+    Rational a(1,2), b(1,3), c(1,4);
+    const Rational& r1 = a * b;  // r1 refers to static `result`
+    const Rational& r2 = a * c;  // overwrites same static `result`
+
+    std::cout << "a*b = " << r1 << "\n"; // now prints a*c instead of a*b! (unexpected!)
+    std::cout << "a*c = " << r2 << "\n";
 }
 
 /*
@@ -113,4 +137,10 @@ reasonable way for clients of operator* to make those calls, because
 there’s no reasonable way for them to get at the pointers hidden
 behind the references being returned from the calls to operator*. This
 is a guaranteed resource leak.
+
+Key Takeaways:
+    * Never return a pointer or reference to a local stack object, a 
+    reference to a heap-allocated object, or a pointer or reference to a local
+    static object if there is a chance that more than one such object will
+    be needed. 
 */
