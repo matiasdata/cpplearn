@@ -57,3 +57,11 @@ int main() {
     sdc.addValue(20);
     std::cout << "average = " << sdc.averageSoFar() << "\n";
 }
+
+/*
+Key Takeaways:
+    * Declare data members private. It gives clients syntactically uniform
+    access to data, affords fine-grained access control, allows invariants
+    to be enforced, and offers class authors implementation flexibility.
+    * protected is no more encapsulated than public.
+*/
