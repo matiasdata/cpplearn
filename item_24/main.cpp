@@ -41,6 +41,10 @@ private:
 inline const Rational operator*(const Rational& lhs, const Rational& rhs){
     return Rational(lhs.getnum() * rhs.getnum(), lhs.getden() * rhs.getden());
 }
+// Keep operator* as a non-member non-friend.
+// The getter calls don’t hurt efficiency (they’ll inline). 
+// Returning an int involves no heap allocation, no hidden copies — it’s literally just loading an integer from memory.
+// This way, your Rational remains more encapsulated and extensible.
 
 std::ostream& operator<<(std::ostream& os, const Rational& r) {
     return os << r.getnum()<< "/" << r.getden();
@@ -56,3 +60,12 @@ int main()
     result = 2 * oneFourth; 
     std::cout << "Result = " << result << "\n";
 }
+
+/*
+Summary of Item 24:
+If you need implicit type conversions on *all* parameters (not just the right-hand one),
+the function must be a non-member. For example, operator*(Rational, Rational) should be
+non-member so that both `oneHalf * 2` and `2 * oneHalf` compile correctly.
+Being non-member does not mean it must be a friend — prefer using only the public interface
+unless direct private access is truly necessary.
+*/
