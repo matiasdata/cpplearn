@@ -68,4 +68,9 @@ the function must be a non-member. For example, operator*(Rational, Rational) sh
 non-member so that both `oneHalf * 2` and `2 * oneHalf` compile correctly.
 Being non-member does not mean it must be a friend — prefer using only the public interface
 unless direct private access is truly necessary.
+
+Key takeaways:
+    If you need type conversions on all parameters to a function (includ-
+    ing the one that would otherwise be pointed to by the this pointer),
+    the function must be a non-member.
 */
