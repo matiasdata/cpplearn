@@ -62,11 +62,6 @@ namespace std
     }
 }
 
-
-
-
-
-
 // Client code using swap
 int main() {
     using namespace WidgetStuff;
@@ -80,10 +75,70 @@ int main() {
     w1.print();
     w2.print();
 
-    using std::swap;
+    using std::swap; // need to add this qualify and then call it without qualification.
     swap(w1, w2); // calls our efficient Widget::swap
 
     std::cout << "After swap:\n";
     w1.print();
     w2.print();
 }
+
+/*
+
+Why three swap functions?
+1. Member swap (Widget::swap): Provides the most efficient, noexcept way to swap 
+   two Widgets by exchanging their internal pointers. This is the core implementation.
+   Needed to have access to the private pointers, so that the non-member swap can call it.
+
+2. Non-member swap (in WidgetStuff): Calls the member swap. Thanks to argument-
+   dependent lookup (ADL), this version is found automatically when clients write
+   `swap(a, b)` without qualification. This ensures the most efficient swap is used.
+
+3. Specialization of std::swap: Some code (including parts of the standard library) 
+   mistakenly qualifies swap as std::swap, bypassing ADL. By providing a total 
+   specialization for Widget, we make sure even such code benefits from the efficient 
+   swap implementation.
+
+Together, these ensure Widget swapping is efficient, noexcept, and works correctly
+in all contexts (unqualified calls with ADL, qualified std::swap calls, and generic 
+code using templates).
+
+Why "using std::swap;" before calling swap?
+
+- We want to call the most efficient swap for the type T:
+    * If T has its own overload of swap (found by ADL in T's namespace),
+      we want to use that (e.g., WidgetStuff::swap).
+    * Otherwise, we want to fall back on the generic std::swap.
+
+- The `using std::swap;` line makes std::swap visible in the current scope.
+  This ensures that when we later write `swap(a, b);` (unqualified call),
+  the compiler considers BOTH:
+      1. std::swap (now visible thanks to `using`), and
+      2. any type-specific swap found by argument-dependent lookup (ADL).
+
+- If a type-specific swap exists (like our WidgetStuff::swap), ADL ensures 
+  it is chosen over std::swap, giving us the efficient, noexcept swap.
+  If no type-specific swap exists, the call falls back to std::swap safely.
+
+- If we skipped `using std::swap;` and wrote `swap(a, b);`, the compiler 
+  would look only via ADL. If no type-specific swap is found, the call 
+  would fail to compile (because std::swap wouldn’t be visible).
+
+- If we instead wrote `std::swap(a, b);` directly, ADL is bypassed entirely, 
+  and we’d always use std::swap — even when a more efficient type-specific 
+  swap exists. This is exactly what we want to avoid.
+
+Therefore, the correct pattern is:
+    using std::swap;
+    swap(a, b); // unqualified call, ADL + fallback
+
+Key takeaways:
+    * Provide a swap member function when std::swap would be inefficient
+    for your type. Make sure your swap doesn’t throw exceptions.
+    * If you offer a member swap, also offer a non-member swap that calls
+    the member. For classes (not templates), specialize std::swap, too.
+    * When calling swap, employ a using declaration for std::swap, then call
+    swap without namespace qualification.
+    * It’s fine to totally specialize std templates for user-defined types, but
+    never try to add something completely new to std.
+*/
