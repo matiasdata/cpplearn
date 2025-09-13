@@ -136,7 +136,9 @@ Key takeaways:
     * Provide a swap member function when std::swap would be inefficient
     for your type. Make sure your swap doesn’t throw exceptions.
     * If you offer a member swap, also offer a non-member swap that calls
-    the member. For classes (not templates), specialize std::swap, too.
+    the member. For classes (not templates), specialize std::swap, too. For
+    templates just offer a non-member function (not an specializatio or 
+    overloading of std::swap).
     * When calling swap, employ a using declaration for std::swap, then call
     swap without namespace qualification.
     * It’s fine to totally specialize std templates for user-defined types, but
