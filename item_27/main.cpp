@@ -29,6 +29,19 @@ public:
     }
 };
 
+class Animal
+{
+public:
+    virtual ~Animal() = default;
+};
+
+class Cow : public Animal
+{
+public:
+    void makeSound(){std::cout << "Muuu" <<"\n";}
+};
+
+
 
 int main() {
     Derived d;
@@ -42,6 +55,15 @@ int main() {
     std::cout << "Address as Base1*: " << pb1 << "\n";
     std::cout << "Address as Base2*: " << pb2 << "\n";
 
+    Animal* pa = new Cow(); // create a pointer to a base1 object
+    if(Cow* pc = dynamic_cast<Cow*>(pa)) // dynamic_cast to downcast a Animal* to Cow*. Only for polymorphic classes (with at least one virtual function).
+    {
+        pc->makeSound();
+    }
+    else
+    {
+        std::cout << "Not a Cow\n";
+    }
 
     SpecialWindow sw;
     sw.onResize(10); // Wrong resize!
@@ -56,6 +78,16 @@ On most compilers you’ll see:
     * Base2* is offset (because Base2 lives after Base1 inside Derived).
 
 This shows why a cast isn’t “free” — converting Derived* → Base2* requires adding an offset at runtime.
+
+dynamic_cast
+    Purpose: Safe downcasting in class hierarchies with virtual functions.
+    Works only with polymorphic types (at least one virtual function).
+    Checks at runtime if a base pointer/reference actually refers to a derived object.
+
+Key facts:
+    * If the cast is valid, you get a usable pointer.
+    * If it’s invalid, you get nullptr (for pointers) or an exception (std::bad_cast) for references.
+    * Cost: It’s usually implemented via runtime type information (RTTI). This can be slow in performance-critical code (string comparisons, vtable lookups, etc.).
 
 Key Takeaways:
     * Avoid casts whenever practical, especially dynamic_casts in perfor-
