@@ -39,3 +39,14 @@ int main() {
     cr.upperLeft().print();
 
 }
+
+
+/* 
+
+Key Takeaways:
+    * Avoid returning handles (references, pointers, or iterators) to object
+    internals. Not returning handles increases encapsulation, helps
+    const member functions act const, and minimizes the creation of
+    dangling handles.
+
+*/
