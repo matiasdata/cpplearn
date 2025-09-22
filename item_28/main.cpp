@@ -30,6 +30,10 @@ private:
     std::shared_ptr<RectData> pData;
 };
 
+Rectangle boundingBox() {
+    return Rectangle(Point(1,1), Point(10,10));
+}
+
 
 int main() {
     Rectangle r(Point(0,0), Point(10,10));
@@ -38,6 +42,10 @@ int main() {
     cr.upperLeft().setX(5); // modifies internal state of a const object!
     cr.upperLeft().print();
 
+    const Point* p = &(boundingBox().upperLeft()); 
+    // dangling handle, the Rectangle returned gby boundingBox() cease to exists after this line (temporary).
+    // ❌ UB: boundingBox() returned a temporary Rectangle, already destroyed!
+    p->print(); // undefined behavior, accessing deleted memory, no compile errors.
 }
 
 
