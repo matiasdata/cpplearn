@@ -56,5 +56,11 @@ Key Takeaways:
     internals. Not returning handles increases encapsulation, helps
     const member functions act const, and minimizes the creation of
     dangling handles.
+    * Don’t return handles to internals unless you absolutely must.
+    * Even if you use const, handles can still dangle.
+    * Safer alternatives:
+    * Return by value (copy).
+    * Return const reference only if the object’s lifetime is guaranteed.
+    * Redesign API to avoid exposing internals.
 
 */
