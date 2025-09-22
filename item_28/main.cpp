@@ -44,7 +44,7 @@ int main() {
 
     const Point* p = &(boundingBox().upperLeft()); 
     // dangling handle, the Rectangle returned gby boundingBox() cease to exists after this line (temporary).
-    // ❌ UB: boundingBox() returned a temporary Rectangle, already destroyed!
+    // UB: boundingBox() returned a temporary Rectangle, already destroyed!
     p->print(); // undefined behavior, accessing deleted memory, no compile errors.
 }
 
