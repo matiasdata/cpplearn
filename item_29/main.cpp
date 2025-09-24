@@ -87,3 +87,19 @@ int main() {
 
     std::cout << "\nNothrow count check: " << gallery.getCount() << "\n";
 }
+
+/*
+
+Key takeaways:
+    * Exception-safe functions leak no resources and allow no data struc-
+    tures to become corrupted, even when exceptions are thrown. Such
+    functions offer the basic, strong, or nothrow guarantees.
+    * The strong guarantee can often be implemented via copy-and-swap,
+    but the strong guarantee is not practical for all functions.
+    * A function can usually offer a guarantee no stronger than the weak-
+    est guarantee of the functions it calls.
+    * Use copy and swap strategies to produce exception safe code that has
+    the strong guarantee, make a copy of the object, do all the work, and at the
+    end if there was no exception (e.g. bad alloc) swap with the object to modify.
+
+*/
