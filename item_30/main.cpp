@@ -60,11 +60,21 @@ to run the script without any optimization. In this way squareNonInline stays a 
  is only inlined because of the keyword inline, not because the compiler feels like it.
 
 Key Takeaways:
+    * Member/friend functions defined (not just declared) inside a class are implicitely inlined. To inline explicitely
+    one needs to use the inline command before the function (for definitions outside the class).
     * Limit most inlining to small, frequently called functions. This facilitates
     debugging and binary upgradability, minimizes potential code
     bloat, and maximizes the chances of greater program speed.
     * Don’t declare function templates inline just because they appear in
     header files.
     * Use it cautiously: focus on the 20% hot paths of your program, not everywhere.
+    * Constructors and Destructors are often worse candidates for inlining than casual examination would indicate, as they
+    usually can make some calls that are not visible (e.g. base class constructors, initialization of data members) and thus
+    they are more complex than their looks.
+    * inline is a request that compilers may ignore. Most compilers refuse to inline functions they deem too complicated 
+    (e.g., those that contain loops or are recursive), and all but the most trivial calls to virtual functions defy inlining.
+    * whether a given inline function is actually inlined depends on the build environment you’re using — primarily on
+    the compiler. Fortunately, most compilers have a diagnostic level that will result in a warning if they fail to inline
+    a function you’ve asked them to.
 
 */
