@@ -7,14 +7,16 @@ public:
     virtual void construct() = 0;
     virtual void fly() = 0;
     int planeID() const {return planeId;}
+// alternatively define a protected default fly member function.
 // protected:    
 //      void defaultFly(){std::cout << "Airplane default fly.\n";}
 private:
     int planeId;
-    static int counter;
+    inline static int counter{0}; // static counter that tracks the IDs assigned so far.
+    // The keyword inline allows in-class initialization.
+    //It guarantees that there is exactly one shared instance of that variable across translation units.
 };
 
-int Airplane::counter = 0;
 
 // define a default implementation for fly, this can be called by derived classes (explicitely) if they need a default implementation.
 void Airplane::fly()
@@ -27,6 +29,8 @@ class ModelA : public Airplane
 public:
     void construct() {std::cout << "Constructing model A.\n";}
     void fly(){Airplane::fly();}
+    // alternative when defining a protected default implementation.
+    // void fly(){defaultFly();}
 };
 
 class ModelB : public Airplane
@@ -34,6 +38,8 @@ class ModelB : public Airplane
 public:
     void construct() {std::cout << "Constructing model B.\n";}
     void fly(){Airplane::fly();}
+    // alternative when defining a protected default implementation.
+    // void fly(){defaultFly();}
 };
 
 class ModelC : public Airplane
