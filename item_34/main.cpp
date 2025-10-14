@@ -89,4 +89,17 @@ the need to specify we refer to the base one). Alternatively, we can declare our
 function as pure virtual, and declare protected a member function that provides a default
 implementation, and then derived classes can call this function if they want to use the 
 default version.
+
+Static data member initialization in modern C++:
+
+- Before C++17:
+    static int counter;
+    int ClassName::counter = 0;   // required definition outside class
+
+- Since C++17:
+    inline static int counter = 0;  // define and initialize inside the class
+
+- "inline static" guarantees exactly one instance across all translation units.
+- Prefer inline static for clarity and encapsulation in new code.
+
 */
