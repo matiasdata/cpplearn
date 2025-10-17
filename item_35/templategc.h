@@ -36,3 +36,24 @@ private:
 
 
 } // namespace TemplateApproach
+
+/*
+
+Use the non-virtual interface idiom (NVI idiom), a form of the
+Template Method design pattern that wraps public non-virtual
+member functions around less accessible virtual functions.
+
+Non-Virtual Interface (NVI) Idiom:
+    - Public non-virtual function (e.g., healthValue)
+      calls a private/protected virtual function (e.g., doHealthValue).
+    - Pattern: Template Method (implementation is done in derived classes, base class can provide default implementation).
+    - Derived classes redefine the private virtual, not the wrapper.
+    - Benefits:
+        * Allows consistent "before" and "after" processing (logging, checks, locking).
+        * Keeps control over when virtual functions are called.
+    - Drawbacks:
+        * Still uses virtual dispatch.
+        * Slightly more boilerplate.
+
+
+*/
