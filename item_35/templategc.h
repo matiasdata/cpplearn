@@ -55,5 +55,4 @@ Non-Virtual Interface (NVI) Idiom:
         * Still uses virtual dispatch.
         * Slightly more boilerplate.
 
-
 */
