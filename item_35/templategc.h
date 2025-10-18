@@ -21,8 +21,8 @@ protected:
     }
 private:
     int Health;
-    void preHealthCheck() const  { std::cout << "[Before health check]\n"; }
-    void postHealthCheck() const { std::cout << "[After health check]\n";  }
+    void preHealthCheck() const  { }//std::cout << "[Before health check]\n"; }
+    void postHealthCheck() const { }//std::cout << "[After health check]\n";  }
 };
 
 class Warrior : public GameCharacter
