@@ -17,5 +17,20 @@ private:
 };
 
 int loseHealthFast(const GameCharacter&){return 50;}
-int loseHealthSlow(const GameCharacter&){return 200;}
-} // namespace StratFunApproach
+struct loseHealthSlow
+{
+    int operator()(const GameCharacter&) const {return 200;}
+};
+auto loseHealthSuperSlow = [] (const GameCharacter&) {return 1000;};
+
+} // namespace StratFunApproach 
+
+
+/*
+Advantages:
+  - Runtime flexibility: each instance can have its own behavior.
+  - Works with lambdas, functions, functors, and member functions.
+  - Very clean and modern (C++11+).
+Drawbacks:
+  - External functions can’t access private members unless made friends.
+*/
