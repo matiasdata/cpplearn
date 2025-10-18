@@ -82,9 +82,9 @@ Key takeaways:
 */
 
 /*
-================================================================================
+
  Design Characteristics
-================================================================================
+============================================================================================================================================================
 | Approach              | Key Idea                                        | Flexibility  | Encapsulation                  | Overhead  | Style              |
 |------------------------|------------------------------------------------|--------------|--------------------------------|-----------|--------------------|
 | Basic Virtual Function | Derived classes override virtual members       | Medium       | Good                           | Low       | Classic OOP        |
@@ -92,9 +92,9 @@ Key takeaways:
 | Functional Strategy    | Pass callable (function, lambda, functor)      | High         | Weaker (external logic)        | Low       | Modern / Functional|
 | Classic Strategy       | Encapsulate algorithm in separate hierarchy    | High         | Strong (interface-based)       | Higher    | Pure OOP           |
 
-================================================================================
+============================================================================================================================================================
  Advantages and Disadvantages
-================================================================================
+===========================================================================================================================================================
 | Approach              | Advantages                                                    | Disadvantages                                                   |
 |------------------------|--------------------------------------------------------------|-----------------------------------------------------------------|
 | Basic Virtual Function | - Simple and intuitive                                       | - Behavior fixed per class                                      |
@@ -112,7 +112,7 @@ Key takeaways:
 | Classic Strategy       | - Decouples behavior from data                               | - More code and indirection                                     |
 |                        | - Extensible via new strategy classes                        | - Harder lifetime management                                    |
 |                        | - Strong encapsulation                                       | - Slightly higher runtime cost                                  |
-================================================================================
+===========================================================================================================================================================
 */
 
 
