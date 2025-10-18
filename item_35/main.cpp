@@ -81,6 +81,40 @@ Key takeaways:
 
 */
 
+/*
+================================================================================
+ Design Characteristics
+================================================================================
+| Approach              | Key Idea                                        | Flexibility  | Encapsulation                  | Overhead  | Style              |
+|------------------------|------------------------------------------------|--------------|--------------------------------|-----------|--------------------|
+| Basic Virtual Function | Derived classes override virtual members       | Medium       | Good                           | Low       | Classic OOP        |
+| NVI (Template Method)  | Public non-virtual calls private virtual "core"| Medium       | Excellent (base controls order)| Low       | Traditional OOP    |
+| Functional Strategy    | Pass callable (function, lambda, functor)      | High         | Weaker (external logic)        | Low       | Modern / Functional|
+| Classic Strategy       | Encapsulate algorithm in separate hierarchy    | High         | Strong (interface-based)       | Higher    | Pure OOP           |
+
+================================================================================
+ Advantages and Disadvantages
+================================================================================
+| Approach              | Advantages                                                    | Disadvantages                                                   |
+|------------------------|--------------------------------------------------------------|-----------------------------------------------------------------|
+| Basic Virtual Function | - Simple and intuitive                                       | - Behavior fixed per class                                      |
+|                        | - Full access to base internals                              | - Limited runtime flexibility                                   |
+|                        | - Efficient dispatch via vtable                              | - Tight coupling through inheritance                            |
+
+| NVI (Template Method)  | - Base controls when virtuals run                            | - Slightly more boilerplate                                     |
+|                        | - Ensures pre/post conditions                                | - Less freedom for derived classes                              |
+|                        | - Good for enforcing invariants or logging                   |                                                                 |
+
+| Functional Strategy    | - Per-object customization                                   | - External callables lack private access                        |
+| (using std::function)  | - Works with lambdas, functors, bound members                | - Must manually maintain consistency                            |
+|                        | - Easy runtime swapping                                      |                                                                 |
+
+| Classic Strategy       | - Decouples behavior from data                               | - More code and indirection                                     |
+|                        | - Extensible via new strategy classes                        | - Harder lifetime management                                    |
+|                        | - Strong encapsulation                                       | - Slightly higher runtime cost                                  |
+================================================================================
+*/
+
 
 /*
 On C++ most vexing parse:
