@@ -20,9 +20,10 @@ public:
     using Base::mf1; //This makes all base-class overloads with this name visible in the derived class.
     using Base::mf3;
     Derived(int x_) : Base{x_} {}
-    virtual void mf1() {std::cout << "Calling Derived::mf1()\n";} // Never redefine an inherited non-virtual function. Compiles, but shouldn't be done! 
-                                                                  // mf3() should either be virtual or shouldn't be redefined.
-    void mf3(){std::cout << "Calling Derived::mf3()\n";}
+    virtual void mf1() {std::cout << "Calling Derived::mf1()\n";} 
+                                                                  
+    void mf3(){std::cout << "Calling Derived::mf3()\n";} // Never redefine an inherited non-virtual function. Compiles, but shouldn't be done!
+                                                        // mf3() should either be virtual or shouldn't be redefined.
 };
 
 int main()
