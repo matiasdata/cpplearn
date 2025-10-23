@@ -57,8 +57,14 @@ int main()
 
 - Violating this rule leads to confusion, inconsistent semantics, and broken substitutability.
 
-- Special case: destructors in polymorphic bases must be virtual for the same reason.
+- Special case: destructors in polymorphic base classes must be virtual.
+    • If a derived object is deleted through a base pointer and the base destructor is non-virtual,
+      only the Base part is destroyed — the Derived destructor never runs.
+    • This causes resource leaks and undefined behavior.
+    • Making the destructor virtual ensures correct destruction order:
+          Derived::~Derived() → Base::~Base()
 
 → Rule: Never redefine (hide) an inherited non-virtual function.
+   If you need different behavior, make it virtual.
 ===============================================================================
 */
