@@ -37,22 +37,75 @@ public:
                                                          // bad: solution do not override, just keep without any default parameter, 
                                                          // it will take the parameter from the Base class. 
     {
-        std::cout << "Drawing Rectangle in color: " << colorToString(color) << "\n";
+        std::cout << "Drawing Circle in color: " << colorToString(color) << "\n";
     }
     ~Circle() = default;
 };
 
+// Fix with the NVI pattern
+
+class ShapeNVI
+{
+public:
+    void draw(Color color) const {doDraw(color);}
+    void draw() const {doDraw(defaultColor());}
+    virtual ~ShapeNVI() = default;
+protected:
+    virtual void doDraw(Color color) const = 0;
+    virtual Color defaultColor() const {return Color::Red;} // virtual default provider
+};
+
+class RectangleNVI : public ShapeNVI
+{
+public:
+    ~RectangleNVI() = default;
+protected:
+    void doDraw(Color color) const override 
+    {
+        std::cout << "Drawing Rectangle in color: " << colorToString(color) << "\n";
+    }
+    Color defaultColor() const override {return Color::Green;} // override default provider
+};
+
+class CircleNVI : public ShapeNVI
+{
+public:
+    ~CircleNVI() = default;
+protected:
+    void doDraw(Color color) const override 
+    {
+        std::cout << "Drawing Circle in color: " << colorToString(color) << "\n";
+    }
+    Color defaultColor() const override {return Color::Blue;} // override default provider
+};
+
 int main()
 {
-    Shape* ps;
-    Shape* pr = new Rectangle;
-    Shape* pc = new Circle;
-    ps = pr;
-    ps->draw();
-    ps = pc;
-    ps->draw();
-    delete pr;
-    delete pc;
+    std::cout << "Problems overriding default parameters on virtual functions.\n";
+    {
+        Shape* ps;
+        Shape* pr = new Rectangle;
+        pr->draw(Color::Green);
+        Shape* pc = new Circle;
+        ps = pr;
+        ps->draw();
+        ps = pc;
+        ps->draw();
+        delete pr;
+        delete pc;
+    }
+    std::cout << "Using NVI pattern with virtual default provider.\n";
+    {
+        ShapeNVI* ps;
+        ShapeNVI* pr = new RectangleNVI;
+        ShapeNVI* pc = new CircleNVI;
+        ps = pr;
+        ps->draw();
+        ps = pc;
+        ps->draw();
+        delete pr;
+        delete pc;
+    }
 }
 
 
