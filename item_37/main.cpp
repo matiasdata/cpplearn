@@ -33,7 +33,7 @@ public:
 class Circle : public Shape
 {
 public:
-    void draw(Color color = Color::Green) const override 
+    void draw(Color color = Color::Blue) const override 
                                                          // bad: solution do not override, just keep without any default parameter, 
                                                          // it will take the parameter from the Base class. 
     {
@@ -87,6 +87,8 @@ int main()
         Shape* pr = new Rectangle;
         pr->draw(Color::Green);
         Shape* pc = new Circle;
+        Rectangle r;
+        r.draw();
         ps = pr;
         ps->draw();
         ps = pc;
