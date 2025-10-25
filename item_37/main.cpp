@@ -83,15 +83,15 @@ int main()
 {
     std::cout << "Problems overriding default parameters on virtual functions.\n";
     {
-        Shape* ps;
-        Shape* pr = new Rectangle;
+        Shape* ps; // Static type: Shape*, Dynamic Type: null
+        Shape* pr = new Rectangle; // Static type: Shape*, Dynamic Type: Rectangle*
         pr->draw(Color::Green);
-        Shape* pc = new Circle;
+        Shape* pc = new Circle; // Static type: Shape*, Dynamic Type: Circle*
         Rectangle r;
         r.draw();
-        ps = pr;
+        ps = pr; // Now ps dynamic Type is Rectangle*
         ps->draw();
-        ps = pc;
+        ps = pc; // Now ps dynamic Type is Circle*
         ps->draw();
         delete pr;
         delete pc;
@@ -116,32 +116,42 @@ int main()
 ===============================================================================
  Item 37: Never redefine an inherited default parameter value
 ===============================================================================
-- Virtual functions are *dynamically bound* (resolved at runtime),
-  but *default parameter values are statically bound* (resolved at compile time).
+- **Static Type**: The type an object or pointer is declared as in source code.
+  Example:
+      Shape* ps = new Rectangle;
+  → ps has static type Shape*.
 
-- This mismatch causes inconsistent behavior:
-      Shape* pr = new Rectangle;
-      pr->draw();  // calls Rectangle::draw(Shape::Red)!
-  → The function invoked is Rectangle::draw, but the default argument (Red)
-    is taken from Shape, because pr’s *static type* is Shape*.
+- **Dynamic Type**: The type of the object actually referenced at runtime.
+  In the above example:
+      ps's dynamic type is Rectangle*.
 
-- Why? Efficiency. Default arguments are bound at compile time for speed;
-  changing this would complicate runtime dispatch.
+- **Binding Rules**:
+    • Virtual functions are **dynamically bound** — the call resolves
+      to the function of the object's dynamic type.
+    • Default parameter values are **statically bound** — the compiler
+      substitutes them based on the static type of the expression.
 
-- Duplicating default parameter values in base and derived classes leads to
-  maintenance hazards (must update every derived class when the default changes).
+- This mismatch causes confusion:
+      Shape* ps = new Rectangle;
+      ps->draw();   // calls Rectangle::draw(Color::Red)!
+  Even though Rectangle redefines draw(Color::Green), the default
+  argument (Color::Red) comes from Shape because ps’s *static type*
+  is Shape*.
 
-- Solution: Use the **NVI (Non-Virtual Interface)** idiom:
-    • Base class provides a non-virtual `draw(color = Red)` that calls
-      a private virtual `doDraw(color)`.
-    • Derived classes override `doDraw` only — no default value duplication.
-    • The base class alone controls the default parameter.
+- **Correct Design Approaches**:
+    1. Don't redefine default parameters in derived classes — omit them.
+       Let the base class default apply.
+    2. If you want a new default, add an overload:
+           void draw() const { draw(Color::Green); }
+       (safe and explicit)
+    3. Or use the NVI (Non-Virtual Interface) pattern:
+           - Base defines draw(Color = Red)
+           - Derived overrides doDraw(Color)
+           - Optional: virtual Color defaultColor() for dynamic defaults.
 
-- Relation to Item 36: Just as you should never redefine a non-virtual function,
-  you should never redefine a default parameter, because both lead to
-  inconsistent and confusing behavior.
-
-→ Rule: Never redefine an inherited default parameter value.
-   Use the NVI idiom to centralize defaults safely.
+- Rule: Never redefine an inherited default argument.
+   Default parameters = static binding; virtuals = dynamic binding.
+   Mixing them breaks expected polymorphic behavior.
 ===============================================================================
 */
+
