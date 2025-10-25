@@ -141,9 +141,6 @@ int main()
 - **Correct Design Approaches**:
     1. Don't redefine default parameters in derived classes — omit them.
        Let the base class default apply.
-    2. If you want a new default, add an overload:
-           void draw() const { draw(Color::Green); }
-       (safe and explicit)
     3. Or use the NVI (Non-Virtual Interface) pattern:
            - Base defines draw(Color = Red)
            - Derived overrides doDraw(Color)
