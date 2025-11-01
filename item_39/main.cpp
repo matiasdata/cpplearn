@@ -74,7 +74,8 @@ int main()
     std::cout << "\n=== Private Inheritance Example ===\n";
     WidgetPI wpi(5);
     wpi.startMonitoring();
-    // wpi.start(); // error, inaccessible.
+    // wpi.start(); // error, inaccessible. WidgetPI isn't a Timer!
+    // Timer* tp = new WidgetPI(5); // error: conversion to inaccessible base class "Timer" is not allowed
 }
 
 # /*
