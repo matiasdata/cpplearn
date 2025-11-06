@@ -36,12 +36,12 @@ void doProcessingTemplate(T& w) {
 }
 
 // Example type supporting implicit interface required by doProcessingTemplate
-class Gadget {
+class Gadget : public Widget {
 public:
-    std::size_t size() const { return 15; }
-    void normalize() { std::cout << "Normalizing Gadget\n"; }
+    std::size_t size() const override { return 15; }
+    void normalize() override { std::cout << "Normalizing Gadget\n"; }
     void swap(Gadget&) { std::cout << "Swapping Gadgets\n"; }
-    bool operator!=(const Gadget&) const { return false; }
+    bool operator!=(const Widget& other) const { return this != &other; }
 };
 
 int main() {
