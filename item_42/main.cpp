@@ -25,13 +25,38 @@ Alternatively, we can use auto in modern C++ (way easier and more readable, but 
 1 error generated.
 */
 
+// exception to the rule: nested classes
+
+template<typename T>
+class Base {
+public:
+    class Nested {
+    public:
+        explicit Nested(int x) { std::cout << "Base::Nested(" << x << ")\n"; }
+    };
+};
+
+template<typename T>
+class Derived : public Base<T>::Nested // typename not allowed
+{
+public:
+    explicit Derived(int x)
+        : Base<T>::Nested(x)   // typename not allowed here in initialization
+    {
+        typename Base<T>::Nested temp(42); // typename needed here, two Base<T>::Nested object are created in this case
+    }
+};
+
 int main()
 {
-    std::cout << "Use of typename for nested dependent typenames.\n";
+    std::cout << "=== Use of typename for nested dependent typenames ===\n";
     std::vector<int> v{1,2,3};
     std::list<int> l{3,4,5};
     print2nd(v);
     print2nd(l);
+
+    std::cout << "\n=== Typename rule exceptions ===\n";
+    Derived<int> d(10);
 }
 
 /*
