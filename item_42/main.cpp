@@ -40,8 +40,7 @@ template<typename T>
 class Derived : public Base<T>::Nested // typename not allowed
 {
 public:
-    explicit Derived(int x)
-        : Base<T>::Nested(x)   // typename not allowed here in initialization
+    explicit Derived(int x) : Base<T>::Nested(x)   // typename not allowed here in initialization
     {
         typename Base<T>::Nested temp(42); // typename needed here, two Base<T>::Nested object are created in this case
     }
